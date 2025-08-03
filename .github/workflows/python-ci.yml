@@ -1,0 +1,93 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  PYTHONPATH: ${{ github.workspace }}
+
+jobs:
+  smoke_test:
+    name: Smoke Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt || pip install pytest requests
+
+      - name: Run Smoke Test
+        run: pytest tests/test_health_check.py -v
+
+  main_tests:
+    name: Main Tests
+    runs-on: ubuntu-latest
+    needs: smoke_test
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt || pip install pytest requests
+
+      - name: Run All Main Tests
+        run: pytest tests/test_true_cases.py tests/test_false_cases.py tests/test_edge_case.py -v --maxfail=1 --tb=short
+
+  kafka_tests:
+    name: Kafka Integration
+    runs-on: ubuntu-latest
+    needs: main_tests
+    services:
+      kafka:
+        image: bitnami/kafka:latest
+        ports:
+          - 9092:9092
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Kafka Tests
+        run: |
+          echo "Starting Kafka-based tests"
+          python kafka_consumer.py &
+          sleep 5
+          python kafka_producer.py
+
+  security_check:
+    name: Security Tests
+    runs-on: ubuntu-latest
+    needs: kafka_tests
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Security Tests
+        run: pytest tests/test_security.py -v

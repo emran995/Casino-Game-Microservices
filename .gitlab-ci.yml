@@ -1,0 +1,56 @@
+stages:
+  - smoke
+  - test
+  - kafka
+  - security
+
+variables:
+  PYTHONPATH: "${CI_PROJECT_DIR}"
+
+.default_python_job:
+  image: python:3.10
+  before_script:
+    - pip install -r requirements.txt || pip install pytest requests
+  only:
+    - merge_requests
+    - main
+
+smoke_test:
+  extends: .default_python_job
+  stage: smoke
+  script:
+    - pytest tests/test_health_check.py -v
+
+main_tests:
+  extends: .default_python_job
+  stage: test
+  script:
+    - pytest tests/test_true_cases.py tests/test_false_cases.py tests/test_edge_case.py -v --maxfail=1 --tb=short
+
+kafka_tests:
+  image: python:3.10
+  stage: kafka
+  services:
+    - name: bitnami/kafka:latest
+      alias: kafka
+  variables:
+    KAFKA_CFG_ZOOKEEPER_CONNECT: kafka:2181
+    KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+    KAFKA_BROKER_ID: 1
+  before_script:
+    - pip install -r requirements.txt
+  script:
+    - echo "Starting Kafka-based tests"
+    - python kafka_consumer.py &
+    - sleep 5
+    - python kafka_producer.py
+  artifacts:
+    paths:
+      - results/
+    when: always
+
+security_check:
+  extends: .default_python_job
+  stage: security
+  script:
+    - pytest tests/test_security.py -v
