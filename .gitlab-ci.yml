@@ -44,7 +44,7 @@ kafka_tests:
     KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT"
     KAFKA_KRAFT_CLUSTER_ID: "r123456clusterid"
   before_script:
-    - apt-get update && apt-get install -y netcat
+    - apt-get update && apt-get install -y netcat-openbsd
     - pip install -r requirements.txt
 
   script:
