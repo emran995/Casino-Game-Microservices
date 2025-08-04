@@ -14,9 +14,9 @@ services:
       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT
       - KAFKA_KRAFT_CLUSTER_ID=r123456clusterid
       - ALLOW_PLAINTEXT_LISTENER=yes
-      - KAFKA_CFG_LOG_DIRS=/bitnami/kafka/data
+      - KAFKA_CFG_LOG_DIRS=/bitnami/kafka/data  # 🟢 חובה
     volumes:
-      - kafka_data:/bitnami/kafka
+      - kafka_data:/bitnami/kafka                # 🟢 חובה
     ports:
       - "9092:9092"
       - "9093:9093"
