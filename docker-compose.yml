@@ -1,51 +1,44 @@
-version: '3.8'
+version: "3.8"
 
 services:
   kafka:
-    image: bitnami/kafka:3.6.1
-    hostname: kafka
-    container_name: kafka
-    restart: unless-stopped
-    environment:
-      - KAFKA_ENABLE_KRAFT=yes
-      - KAFKA_CFG_NODE_ID=1
-      - KAFKA_CFG_PROCESS_ROLES=controller,broker
-      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
-      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
-      - KAFKA_CFG_LISTENERS=INTERNAL://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
-      - KAFKA_CFG_ADVERTISED_LISTENERS=INTERNAL://kafka:9092
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT
-      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=INTERNAL
-      - ALLOW_PLAINTEXT_LISTENER=yes
-      - KAFKA_CFG_LOG_DIRS=/bitnami/kafka/data
-    volumes:
-      - kafka_data:/bitnami/kafka
+    image: bitnami/kafka:3.6
     ports:
       - "9092:9092"
-      - "9093:9093"
+    environment:
+      - KAFKA_KRAFT_MODE=true
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=INTERNAL://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=INTERNAL://kafka:9092
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=INTERNAL
+    volumes:
+      - kafka_data:/bitnami/kafka
     networks:
       - test-net
 
   test-runner:
     image: python:3.10
-    depends_on:
-      - kafka
+    working_dir: /app
     volumes:
       - .:/app
-    working_dir: /app
-    networks:
-      - test-net
     command: >
       sh -c "
         apt-get update &&
         apt-get install -y netcat-openbsd &&
-        pip install -r requirements.txt confluent_kafka &&
+        pip install --no-cache-dir -r requirements.txt &&
+        python -c 'import confluent_kafka; print(\"confluent_kafka is installed\")' &&
         for i in {1..10}; do nc -z kafka 9092 && echo 'Kafka is ready' && break || echo 'Waiting for kafka...' && sleep 5; done &&
         python kafka_consumer.py &
         sleep 5 &&
         python kafka_producer.py
       "
-
+    depends_on:
+      - kafka
+    networks:
+      - test-net
 
 volumes:
   kafka_data:
