@@ -37,7 +37,8 @@ services:
       - test-net
     command: >
       sh -c "
-        apt-get update && apt-get install -y netcat &&
+        apt-get update &&
+        apt-get install -y netcat-openbsd &&
         pip install -r requirements.txt &&
         for i in {1..10}; do nc -z kafka 9092 && echo 'Kafka is ready' && break || echo 'Waiting for kafka...' && sleep 5; done &&
         python kafka_consumer.py &
