@@ -1,6 +1,7 @@
 import pytest
 from casino_tests.utils import place_bet, get_balance, spin, payout, notify, MockHelper
 
+
 @pytest.mark.usefixtures("mock_requests")
 class TestPositiveCases:
 

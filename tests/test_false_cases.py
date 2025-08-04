@@ -3,6 +3,7 @@ from casino_tests.utils import MockHelper, place_bet, spin, payout, notify
 
 
 class TestNegativeCases:
+
     def test_insufficient_balance(self, mock_requests):
         mock_requests.get.return_value = MockHelper.make_mock_response({"balance": 5})
         mock_requests.post.return_value = MockHelper.make_mock_response({"error": "Insufficient balance"}, status_code=400)
