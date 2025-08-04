@@ -43,4 +43,5 @@ volumes:
 
 networks:
   test-net:
+    name: test-net
     external: false

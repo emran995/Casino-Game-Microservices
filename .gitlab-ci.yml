@@ -38,6 +38,7 @@ kafka_tests:
     - apk add --no-cache docker-cli docker-compose
     - docker network create test-net || true
   script:
+    - docker network ls
     - docker-compose -f docker-compose.yml up --abort-on-container-exit
   artifacts:
     paths:
