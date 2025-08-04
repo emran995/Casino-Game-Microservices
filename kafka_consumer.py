@@ -1,9 +1,26 @@
+"""
+Kafka Consumer Test Runner
+
+This script consumes user ID events from the Kafka topic 'qa_user_ids'
+and triggers pytest runs for each user ID.
+
+For each consumed userId:
+- Runs the test suite 'tests/full_game_flow.py' with --user_id argument
+- Captures the result and extracts the final test summary line
+- Logs the results to a CSV file: results/user_test_results.csv
+
+Usage:
+- Requires Kafka running and messages published to 'qa_user_ids'
+- Messages must be in JSON format: {"userId": <int>}
+"""
+
 import csv
 import os
-from confluent_kafka import Consumer
-import subprocess
 import json
+import subprocess
+from confluent_kafka import Consumer
 
+# Initialize Kafka consumer
 consumer = Consumer({
     'bootstrap.servers': 'kafka:9092',
     'group.id': 'qa-consumer',
@@ -11,13 +28,12 @@ consumer = Consumer({
 })
 
 consumer.subscribe(['qa_user_ids'])
-
 print("Waiting for user IDs from Kafka...")
 
-# צור תיקייה אם לא קיימת
+# Create results directory if it doesn't exist
 os.makedirs("results", exist_ok=True)
 
-# פתח קובץ CSV לכתיבה
+# Open CSV file for writing test results
 with open("results/user_test_results.csv", mode="w", newline="") as csv_file:
     writer = csv.writer(csv_file)
     writer.writerow(["User ID", "Test Result", "Last Line"])

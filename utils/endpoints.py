@@ -1,6 +1,7 @@
 from enum import Enum
 import requests
 import os
+
 BASE_URL = os.getenv("BASE_URL", "http://localhost:8000")
 
 
@@ -37,11 +38,3 @@ def notify(user_id, transaction_id, message):
     return requests.post(f"{BASE_URL}{Endpoints.NOTIFY.value}", json={"userId": user_id, "transactionId": transaction_id, "message": message})
 
 
-# utility methods + mock response generator
-class MockHelper:
-    @staticmethod
-    def make_mock_response(data, status_code=200):
-        return type("MockResponse", (), {
-            "status_code": status_code,
-            "json": lambda self: data
-        })()

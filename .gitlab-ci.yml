@@ -16,6 +16,10 @@ variables:
   only:
     - merge_requests
     - main
+  artifacts:
+    paths:
+      - logs/
+    when: always
 
 smoke_test:
   extends: .default_python_job
@@ -51,4 +55,4 @@ security_check:
   extends: .default_python_job
   stage: security
   script:
-    - pytest tests/test_security.py -v
+    - pytest tests/test_security_and_validation.py -v
