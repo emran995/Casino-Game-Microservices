@@ -46,14 +46,17 @@ kafka_tests:
   before_script:
     - pip install -r requirements.txt
   script:
-    - echo "Checking Kafka DNS..."
-    - nslookup kafka || ping -c 3 kafka
-    - echo "Waiting for Kafka service to be ready..."
-    - for i in {1..20}; do nc -z kafka 9092 && echo "Kafka is up" && break || echo "Waiting..." && sleep 3; done
+    - echo "Waiting for Kafka to be ready on kafka:9092..."
+    - for i in {1..20}; do nc -z kafka 9092 && echo "Kafka is UP" && break || echo "Kafka not ready, waiting..." && sleep 3; done
+    - echo "Running Kafka consumer in background..."
     - python kafka_consumer.py &
     - sleep 5
+    - echo "Sending messages from Kafka producer..."
     - python kafka_producer.py
-
+  artifacts:
+    paths:
+      - results/
+    when: always
 
 
 
