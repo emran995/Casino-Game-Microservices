@@ -6,6 +6,8 @@ stages:
 
 variables:
   PYTHONPATH: "${CI_PROJECT_DIR}"
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_TLS_CERTDIR: ""
 
 .default_python_job:
   image: python:3.10
@@ -32,19 +34,15 @@ kafka_tests:
   stage: kafka
   services:
     - docker:dind
-  variables:
-    DOCKER_HOST: tcp://docker:2375/
-    DOCKER_TLS_CERTDIR: ""
   before_script:
-    - apk update && apk add --no-cache docker-cli docker-compose
+    - apk add --no-cache docker-cli docker-compose
+    - docker network create test-net || true
   script:
-    - docker-compose version
-    - docker-compose up --abort-on-container-exit
+    - docker-compose -f docker-compose.yml up --abort-on-container-exit
   artifacts:
     paths:
       - results/
     when: always
-
 
 security_check:
   extends: .default_python_job
