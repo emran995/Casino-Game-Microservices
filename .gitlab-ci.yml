@@ -1,8 +1,7 @@
 stages:
-  - smoke
-  - test
-  - kafka
-  - security
+  - smoke     # Security validations
+  - main      # Main flows for single user functional tests
+  - kafka     # Kafka-based multi-user concurrency for full flow
 
 variables:
   PYTHONPATH: "${CI_PROJECT_DIR}"
@@ -21,17 +20,17 @@ variables:
       - logs/
     when: always
 
-smoke_test:
+smoke_tests:
   extends: .default_python_job
   stage: smoke
   script:
-    - pytest tests/test_health_check.py -v
+    - pytest tests/test_security_and_validation.py -v
 
 main_tests:
   extends: .default_python_job
   stage: test
   script:
-    - pytest tests/test_true_cases.py tests/test_false_cases.py tests/test_edge_case.py -v --maxfail=1 --tb=short
+    - pytest tests/test_true_cases.py tests/test_false_cases.py tests/test_edge_case.py tests/full_game_flow.py -v --maxfail=1 --tb=short
 
 kafka_tests:
   image: docker:latest
