@@ -32,7 +32,7 @@ kafka_tests:
   stage: kafka
   services:
     - name: bitnami/kafka:latest
-      alias: kafka
+      alias: kafka  # ✅ זה החלק הקריטי
   variables:
     KAFKA_ENABLE_KRAFT: "yes"
     KAFKA_CFG_PROCESS_ROLES: "controller,broker"
@@ -47,7 +47,7 @@ kafka_tests:
     - pip install -r requirements.txt
   script:
     - echo "Waiting for Kafka..."
-    - sleep 10
+    - sleep 15
     - python kafka_consumer.py &
     - sleep 5
     - python kafka_producer.py
@@ -55,6 +55,7 @@ kafka_tests:
     paths:
       - results/
     when: always
+
 
 
 security_check:
