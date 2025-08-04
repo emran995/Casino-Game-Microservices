@@ -32,7 +32,7 @@ kafka_tests:
   stage: kafka
   services:
     - name: bitnami/kafka:latest
-      alias: kafka  # 🟢 חובה כדי להשתמש ב kafka:9092
+      alias: kafka
   variables:
     KAFKA_ENABLE_KRAFT: "yes"
     KAFKA_CFG_PROCESS_ROLES: "controller,broker"
@@ -44,20 +44,22 @@ kafka_tests:
     KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT"
     KAFKA_KRAFT_CLUSTER_ID: "r123456clusterid"
   before_script:
-    - apt-get update && apt-get install -y netcat-openbsd
+    - apt-get update && apt-get install -y netcat-openbsd dnsutils
     - pip install -r requirements.txt
   script:
-    - echo "Waiting for Kafka to be ready on kafka:9092..."
-    - for i in {1..20}; do nc -z kafka 9092 && echo "Kafka is UP" && break || echo "Kafka not ready, waiting..." && sleep 3; done
+    - echo "🔍 בדיקת DNS ל-kafka:"
+    - nslookup kafka || (echo "❌ Kafka DNS not found!" && exit 1)
+    - echo "⏳ ממתין ל-Kafka ב-kafka:9092..."
+    - for i in {1..20}; do nc -z kafka 9092 && echo "✅ Kafka is UP" && break || echo "Kafka not ready, waiting ($i)..." && sleep 3; done
+    - echo "🚀 מפעיל consumer"
     - python kafka_consumer.py &
     - sleep 5
+    - echo "📤 מפעיל producer"
     - python kafka_producer.py
   artifacts:
     paths:
       - results/
     when: always
-
-
 
 security_check:
   extends: .default_python_job
