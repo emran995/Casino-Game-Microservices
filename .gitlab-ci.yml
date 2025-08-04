@@ -34,13 +34,20 @@ kafka_tests:
     - name: bitnami/kafka:latest
       alias: kafka
   variables:
-    KAFKA_CFG_ZOOKEEPER_CONNECT: kafka:2181
-    KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-    KAFKA_BROKER_ID: 1
+    KAFKA_ENABLE_KRAFT: "yes"
+    KAFKA_CFG_PROCESS_ROLES: "controller,broker"
+    KAFKA_CFG_NODE_ID: "1"
+    KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: "1@kafka:9093"
+    KAFKA_CFG_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+    KAFKA_CFG_LISTENERS: "INTERNAL://:9092,CONTROLLER://:9093"
+    KAFKA_CFG_ADVERTISED_LISTENERS: "INTERNAL://kafka:9092"
+    KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT"
+    KAFKA_KRAFT_CLUSTER_ID: "r123456clusterid"
   before_script:
     - pip install -r requirements.txt
   script:
-    - echo "Starting Kafka-based tests"
+    - echo "Waiting for Kafka..."
+    - sleep 10
     - python kafka_consumer.py &
     - sleep 5
     - python kafka_producer.py
@@ -48,6 +55,7 @@ kafka_tests:
     paths:
       - results/
     when: always
+
 
 security_check:
   extends: .default_python_job
