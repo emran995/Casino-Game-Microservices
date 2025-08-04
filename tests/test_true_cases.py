@@ -140,3 +140,5 @@ class TestPositiveCases:
         assert payout_resp.status_code == 200, "Expected status 200 from payout"
         assert payout_resp.json()["newBalance"] == 140, "Expected final balance to be 140"
         logger.debug(f"payout response: {payout_resp.json()}")
+
+
