@@ -1,7 +1,7 @@
 stages:
-  - smoke     # Security validations
-  - main      # Main flows for single user functional tests
-  - kafka     # Kafka-based multi-user concurrency for full flow
+  - smoke
+  - test
+  - kafka
 
 variables:
   PYTHONPATH: "${CI_PROJECT_DIR}"
@@ -49,9 +49,3 @@ kafka_tests:
       - results/
     when: always
     expire_in: 1 week
-
-security_check:
-  extends: .default_python_job
-  stage: security
-  script:
-    - pytest tests/test_security_and_validation.py -v
