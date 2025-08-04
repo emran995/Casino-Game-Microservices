@@ -44,15 +44,16 @@ kafka_tests:
     KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT"
     KAFKA_KRAFT_CLUSTER_ID: "r123456clusterid"
   before_script:
+    - apt-get update && apt-get install -y netcat
     - pip install -r requirements.txt
+
   script:
     - echo "Waiting for Kafka to be ready on kafka:9092..."
     - for i in {1..20}; do nc -z kafka 9092 && echo "Kafka is UP" && break || echo "Kafka not ready, waiting..." && sleep 3; done
-    - echo "Running Kafka consumer in background..."
     - python kafka_consumer.py &
     - sleep 5
-    - echo "Sending messages from Kafka producer..."
     - python kafka_producer.py
+  
   artifacts:
     paths:
       - results/
