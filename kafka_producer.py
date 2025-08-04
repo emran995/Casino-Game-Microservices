@@ -1,7 +1,7 @@
 from confluent_kafka import Producer
 import json
 
-producer = Producer({'bootstrap.servers': 'localhost:9092'})
+producer = Producer({'bootstrap.servers': 'kafka:9092'})
 
 for user_id in range(1, 1001):
     event = {"userId": user_id}

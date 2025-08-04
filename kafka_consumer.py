@@ -3,7 +3,7 @@ import subprocess
 import json
 
 consumer = Consumer({
-    'bootstrap.servers': 'localhost:9092',
+    'bootstrap.servers': 'kafka:9092',
     'group.id': 'qa-consumer',
     'auto.offset.reset': 'earliest'
 })
@@ -22,7 +22,7 @@ while True:
 
     print(f"\nRunning tests for user_id={user_id}")
     result = subprocess.run(
-        ["pytest", "tests/test_negative_cases.py", "--user_id", int(user_id)],
+        ["pytest", "tests/test_negative_cases.py", "--user_id", str(user_id)],
         capture_output=True, text=True
     )
 
@@ -30,6 +30,6 @@ while True:
     if result.returncode != 0:
         print(f"Tests failed for user {user_id}")
     else:
-        print(f"teTests passed for user {user_id}")
+        print(f"Tests passed for user {user_id}")
 
 consumer.close()
