@@ -39,12 +39,13 @@ services:
       sh -c "
         apt-get update &&
         apt-get install -y netcat-openbsd &&
-        pip install -r requirements.txt &&
+        pip install -r requirements.txt confluent_kafka &&
         for i in {1..10}; do nc -z kafka 9092 && echo 'Kafka is ready' && break || echo 'Waiting for kafka...' && sleep 5; done &&
         python kafka_consumer.py &
         sleep 5 &&
         python kafka_producer.py
       "
+
 
 volumes:
   kafka_data:
