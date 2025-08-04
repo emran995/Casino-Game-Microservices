@@ -16,7 +16,6 @@ services:
       - KAFKA_CFG_ADVERTISED_LISTENERS=INTERNAL://kafka:9092
       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT
       - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=INTERNAL
-      - KAFKA_KRAFT_CLUSTER_ID=e5f45d7e-9ec9-11ed-a8fc-0242ac120002  # ✅ UUID תקין
       - ALLOW_PLAINTEXT_LISTENER=yes
       - KAFKA_CFG_LOG_DIRS=/bitnami/kafka/data
     volumes:
@@ -38,6 +37,7 @@ services:
       - test-net
     command: >
       sh -c "
+        apt-get update && apt-get install -y netcat &&
         pip install -r requirements.txt &&
         for i in {1..10}; do nc -z kafka 9092 && echo 'Kafka is ready' && break || echo 'Waiting for kafka...' && sleep 5; done &&
         python kafka_consumer.py &
