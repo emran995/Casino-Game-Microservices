@@ -1,10 +1,10 @@
-version: '3.8'
+version: "3.8"
 
 services:
   kafka:
     image: bitnami/kafka:3.6.1
-    container_name: kafka
     hostname: kafka
+    container_name: kafka
     restart: unless-stopped
     environment:
       - KAFKA_ENABLE_KRAFT=yes
@@ -16,9 +16,7 @@ services:
       - KAFKA_CFG_ADVERTISED_LISTENERS=INTERNAL://kafka:9092
       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT
       - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=INTERNAL
-      - KAFKA_KRAFT_CLUSTER_ID=SCDyUWrVTW6B7K7xlBku9Q  # UUID תקין
       - ALLOW_PLAINTEXT_LISTENER=yes
-      - KAFKA_CFG_LOG_DIRS=/bitnami/kafka/data
     volumes:
       - kafka_data:/bitnami/kafka
     ports:
@@ -28,26 +26,15 @@ services:
       - test-net
 
   test-runner:
-    image: python:3.10
-    container_name: test-runner
+    build:
+      context: .
+      dockerfile: Dockerfile
     depends_on:
       - kafka
-    working_dir: /app
-    volumes:
-      - .:/app
     networks:
       - test-net
-    command: >
-      sh -c "
-        apt-get update &&
-        apt-get install -y netcat-openbsd &&
-        pip install --no-cache-dir -r requirements.txt &&
-        pip install --no-cache-dir confluent_kafka &&
-        for i in {1..10}; do nc -z kafka 9092 && echo 'Kafka is ready' && break || echo 'Waiting for kafka...' && sleep 5; done &&
-        python kafka_consumer.py &
-        sleep 5 &&
-        python kafka_producer.py
-      "
+    volumes:
+      - .:/app
 
 volumes:
   kafka_data:
