@@ -1,12 +1,13 @@
 import pytest
 
-from utils.endpoints import place_bet, spin, payout, notify, get_balance
+from utils.endpoints import place_bet, spin, payout, notify
 from utils.mock import MockHelper
 from utils.logger import get_logger
 
 logger = get_logger(__name__)
 
 
+@pytest.mark.nigative_tests
 @pytest.mark.usefixtures("mock_requests")
 class TestNegativeCases:
 

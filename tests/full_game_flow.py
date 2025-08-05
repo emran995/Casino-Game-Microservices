@@ -7,6 +7,7 @@ from tests.common_tests.base_game_test import BaseGameTest
 logger = get_logger(__name__)
 
 
+@pytest.mark.full_game_flow_test
 @pytest.mark.usefixtures("mock_requests")
 class TestPositiveCases(BaseGameTest):
 

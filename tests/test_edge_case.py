@@ -7,6 +7,7 @@ from utils.endpoints import spin
 logger = get_logger(__name__)
 
 
+@pytest.mark.edge_test
 @pytest.mark.usefixtures("mock_requests")
 class TestEdgeCase(BaseGameTest):
 

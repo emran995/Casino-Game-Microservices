@@ -1,8 +1,8 @@
-## Casino Game Microservices – QA Automation Project
+## Casino Game Microservices – QA Automation Project – QA Automation Project
 
 ### Overview
 
-This project is a test automation solution for a simplified Slot Machine Game composed of four interconnected microservices:
+This project is a test automation solution for a simplified Slot Machine Game composed of four interconnected microservices. for a simplified Slot Machine Game composed of four interconnected microservices:
 
 * User Service – Manages player balance
 * Payment Service – Handles bets and payouts
@@ -20,6 +20,10 @@ The automation suite includes:
 * Docker + Docker Compose setup
 * GitLab CI/CD pipeline with 3 distinct stages
 
+## Logs and Debugging
+
+All test run logs are automatically generated and saved under the `logs/` directory at the project root. These logs are useful for debugging failed tests and are collected as artifacts in the CI/CD pipeline.
+
 ### Python Version Requirement
 
 This project requires **Python 3.9 or 3.10**. Please make sure to install it from [https://www.python.org/downloads/](https://www.python.org/downloads/) if you're using an older version.
@@ -34,13 +38,14 @@ python --version
 
 ```
 emran_project/
+├── logs/                         # All test run logs are saved here
 ├── .gitlab-ci.yml                 # CI/CD Pipeline (GitLab)
 ├── Dockerfile                     # Docker setup for Kafka services
 ├── docker-compose.yml            # Kafka + Test runner orchestration
 ├── kafka_producer.py             # Kafka message sender
 ├── kafka_consumer.py             # Kafka message consumer (results)
 ├── requirements.txt              # Python dependencies
-├── STP_STD_docs.pdf # Attached test design document
+├── STP_STD_docs.pdf              # Attached test design document
 ├── tests/
 │   ├── test_true_cases.py        # Strong positive cases
 │   ├── test_false_cases.py       # Negative test scenarios
@@ -57,13 +62,13 @@ emran_project/
 
 ### How to Run Tests Locally
 
-1. Install dependencies
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-2. Run specific test groups
+Run specific test groups:
 
 ```bash
 # True test cases
@@ -75,6 +80,9 @@ pytest tests/test_false_cases.py
 # Full game end-to-end flow
 pytest tests/full_game_flow.py
 
+# Edge case
+pytest tests/test_edge_case.py
+
 # Security validations
 pytest tests/test_security_and_validation.py
 
@@ -82,17 +90,52 @@ pytest tests/test_security_and_validation.py
 docker-compose up --abort-on-container-exit
 ```
 
+#### Optional: Choose a Specific `user_id`
+
+By default, the test suite uses `user_id = 123`.
+
+You can override it when running any test by passing the `--user_id` option to `pytest`:
+
+```bash
+pytest tests/test_true_cases.py --user_id=456
+```
+
+This value will be:
+
+* Assigned to `self.user_id` in your test classes via the `init_user_id` fixture
+* Stored in the environment as `user_id`
+* Used dynamically by the application or mocks where needed
+
+Run by Pytest marks:
+
+```bash
+# Smoke tests
+pytest -m smoke_tests
+
+# Positive test suite
+pytest -m positive_tests
+
+# Negative test suite
+pytest -m nigative_tests
+
+# Edge test
+pytest -m edge_test
+
+# Full game flow
+pytest -m full_game_flow_test
+```
+
 ### GitLab CI/CD Explained
 
-This project includes full CI/CD automation using GitLab. The pipeline runs automatically on each push or merge request into `main`.
+This project includes full CI/CD automation using GitLab. The pipeline runs automatically on each push or merge request into `main`, and you can also run individual jobs by passing the `SYSTEM_TEST` variable manually.
 
 #### Stages Overview
 
-| Stage | Purpose                            | Test Files                                                          |
-| ----- | ---------------------------------- | ------------------------------------------------------------------- |
-| smoke | Quick smoke tests (auth, security) | test\_security\_and\_validation.py                                  |
-| test  | Main functional tests              | test\_true\_cases.py, test\_false\_cases.py, full\_game\_flow\.py   |
-| kafka | Kafka-based multi-user simulation  | Runs kafka\_producer.py and kafka\_consumer.py using Docker Compose |
+| Stage | Purpose                            | Pytest Marks                                                                                                             |
+| ----- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| smoke | Quick smoke tests (auth, security) | @pytest.mark.smoke\_tests                                                                                                |
+| test  | Main functional tests              | @pytest.mark.positive\_tests, @pytest.mark.nigative\_tests, @pytest.mark.edge\_test, @pytest.mark.full\_game\_flow\_test |
+| kafka | Kafka-based multi-user simulation  | -- (Runs kafka\_producer + consumer)                                                                                     |
 
 ### Why Docker & Compose?
 

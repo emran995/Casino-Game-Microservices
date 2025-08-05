@@ -1,5 +1,6 @@
 import time
 
+
 class MockHelper:
     @staticmethod
     def make_mock_response(data, status_code=200, delay=0):

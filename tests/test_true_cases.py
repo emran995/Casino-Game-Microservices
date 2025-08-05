@@ -9,6 +9,7 @@ from utils.logger import get_logger
 logger = get_logger(__name__)
 
 
+@pytest.mark.positive_tests
 @pytest.mark.usefixtures("mock_requests")
 class TestStrongestTrueCases(BaseGameTest):
 

@@ -20,6 +20,7 @@ def is_server_up(host="localhost", port=8000):
         return False
 
 
+@pytest.mark.smoke_tests
 class TestSecurity:
 
     @pytest.fixture(scope="class", autouse=True)
