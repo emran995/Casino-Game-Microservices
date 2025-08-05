@@ -16,6 +16,11 @@ variables:
   only:
     - merge_requests
     - main
+  artifacts:
+    paths:
+      - logs/
+    when: always
+    expire_in: 1 week
 
 smoke_test:
   extends: .default_python_job
@@ -44,5 +49,3 @@ kafka_tests:
     paths:
       - results/
     when: always
-  rules:
-    - if: '$SYSTEM_TEST =~ /.*kafka_tests.*/'
