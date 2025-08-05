@@ -1,5 +1,0 @@
-2025-08-05 03:27:11,537 - INFO - Running: test_exact_balance_edge_case
-2025-08-05 03:27:11,537 - INFO - [User 123] Initial balance set to $10
-2025-08-05 03:27:11,537 - INFO - [User 123] Placed bet of $10, transactionId=txn_555
-2025-08-05 03:27:11,538 - INFO - [User 123] Payout processed: {'newBalance': 30, 'currency': 'USD'}
-2025-08-05 03:27:11,538 - INFO - [User 123] Notification sent successfully

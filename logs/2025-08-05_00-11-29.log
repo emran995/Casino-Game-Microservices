@@ -1,2 +1,0 @@
-2025-08-05 00:11:29,964 - INFO - Testing insufficient balance scenario
-2025-08-05 00:11:29,965 - DEBUG - Response: {'error': 'Insufficient balance'}

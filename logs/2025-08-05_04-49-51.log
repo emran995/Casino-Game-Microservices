@@ -1,7 +1,0 @@
-2025-08-05 04:49:51,961 - INFO - [123] Balance mocked to $150 USD
-2025-08-05 04:49:51,962 - INFO - [123] Placed bet of $10, transactionId=txn_123
-2025-08-05 04:49:51,962 - INFO - [123] WIN: Congratulations! You won $50!
-2025-08-05 04:49:51,962 - INFO - [123] Payout of $50 processed. New balance: $190
-2025-08-05 04:49:52,101 - INFO - [123] Balance mocked to $150 USD
-2025-08-05 04:49:52,102 - INFO - [123] Placed bet of $10, transactionId=txn_123
-2025-08-05 04:49:52,102 - INFO - [123] Notification sent successfully: 'self._validate_lose_response(spin_result[], starting_balance, bet_amount)'

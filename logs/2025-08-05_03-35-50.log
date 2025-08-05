@@ -1,4 +1,0 @@
-2025-08-05 03:35:50,639 - INFO - Running: test_spin_response_time_delay_handling
-2025-08-05 03:35:50,640 - INFO - Initial balance set to $150
-2025-08-05 03:35:50,641 - INFO - Placed bet of $10, transactionId=txn_delay
-2025-08-05 03:35:53,643 - INFO - Notification sent successfully
