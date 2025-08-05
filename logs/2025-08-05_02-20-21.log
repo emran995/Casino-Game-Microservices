@@ -1,0 +1,15 @@
+2025-08-05 02:20:21,819 - INFO - Running: test_extreme_bet_values (maximum allowed bet)
+2025-08-05 02:20:21,820 - INFO - Initial balance set to $2000
+2025-08-05 02:20:21,821 - INFO - Placed bet of $100, transactionId=txn_100
+2025-08-05 02:20:21,821 - INFO - Spin returned: Win
+2025-08-05 02:20:21,821 - INFO - Notification sent successfully
+2025-08-05 02:20:21,824 - INFO - Running: test_extreme_bet_values (minimum allowed bet)
+2025-08-05 02:20:21,824 - INFO - Initial balance set to $2000
+2025-08-05 02:20:21,825 - INFO - Placed bet of $1, transactionId=txn_1
+2025-08-05 02:20:21,825 - INFO - Spin returned: Win
+2025-08-05 02:20:21,826 - INFO - Notification sent successfully
+2025-08-05 02:20:21,828 - INFO - Running: test_extreme_bet_values (beyond maximum allowed bet)
+2025-08-05 02:20:21,829 - INFO - Initial balance set to $2000
+2025-08-05 02:20:21,829 - INFO - Placed bet of $1000, transactionId=txn_1000
+2025-08-05 02:20:21,829 - INFO - Spin returned: Win
+2025-08-05 02:20:21,829 - INFO - Notification sent successfully

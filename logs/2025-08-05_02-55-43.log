@@ -1,0 +1,6 @@
+2025-08-05 02:55:43,473 - INFO - Running full game flow test | user: 123 | bet: 10 | outcome: WIN
+2025-08-05 02:55:43,489 - INFO - User won with message: Congratulations! You won $50!
+2025-08-05 02:55:43,490 - INFO - Test completed: WIN case successful for user 123
+2025-08-05 02:55:43,493 - INFO - Running full game flow test | user: 123 | bet: 10 | outcome: LOSE
+2025-08-05 02:55:43,494 - INFO - User lost with message: Better luck next time!
+2025-08-05 02:55:43,494 - INFO - Test completed: LOSE case successful for user 123

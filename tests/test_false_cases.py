@@ -1,24 +1,30 @@
-from utils.endpoints import place_bet, spin, payout, notify
+import pytest
+
+from utils.endpoints import place_bet, spin, payout, notify, get_balance
 from utils.mock import MockHelper
 from utils.logger import get_logger
 
 logger = get_logger(__name__)
 
 
+@pytest.mark.usefixtures("mock_requests")
 class TestNegativeCases:
 
-    def test_insufficient_balance(self, mock_requests):
+    def test_insufficient_balance(self):
         """
         Test: User tries to place a bet with a balance lower than the bet amount.
         Expected: Server should respond with status 400 and error message "Insufficient balance".
         """
+        logger.info("[Negative Case] test_insufficient_balance - placing bet with low balance")
         user_id = self.user_id
-        logger.info("Testing insufficient balance scenario")
 
-        mock_requests.get.return_value = MockHelper.make_mock_response({"balance": 5})
-        mock_requests.post.return_value = MockHelper.make_mock_response(
+        self.mock.get.return_value = MockHelper.make_mock_response({"balance": 5, "currency": "USD"})
+        self.mock.post.return_value = MockHelper.make_mock_response(
             {"error": "Insufficient balance"}, status_code=400
         )
+
+        balance_resp = self.mock.get.return_value
+        assert balance_resp.json()["currency"] == "USD", "Expected currency to be USD"
 
         response = place_bet(user_id, 10)
         logger.debug(f"Response: {response.json()}")
@@ -26,14 +32,14 @@ class TestNegativeCases:
         assert response.status_code == 400, "Expected status code 400 for insufficient balance"
         assert "error" in response.json(), "Expected 'error' key in response for insufficient balance"
 
-    def test_invalid_transaction_id(self, mock_requests):
+    def test_invalid_transaction_id(self):
         """
         Test: Spin is triggered using an invalid transaction ID.
         Expected: Server should respond with 404 and error "Transaction not found".
         """
-        logger.info("Testing invalid transaction ID in spin")
+        logger.info("[Negative Case] test_invalid_transaction_id - using non-existing transaction ID")
 
-        mock_requests.post.return_value = MockHelper.make_mock_response(
+        self.mock.post.return_value = MockHelper.make_mock_response(
             {"error": "Transaction not found"}, status_code=404
         )
 
@@ -43,14 +49,14 @@ class TestNegativeCases:
         assert response.status_code == 404, "Expected status code 404 for invalid transaction ID"
         assert "error" in response.json(), "Expected 'error' key in response for invalid transaction ID"
 
-    def test_missing_user_id(self, mock_requests):
+    def test_missing_user_id(self):
         """
         Test: Attempt to place a bet without providing a user ID (user_id=None).
         Expected: Server should respond with 400 and error "Missing userId".
         """
-        logger.info("Testing missing user_id in place_bet")
+        logger.info("[Negative Case] test_missing_user_id - sending bet without user_id")
 
-        mock_requests.post.return_value = MockHelper.make_mock_response(
+        self.mock.post.return_value = MockHelper.make_mock_response(
             {"error": "Missing userId"}, status_code=400
         )
 
@@ -60,14 +66,14 @@ class TestNegativeCases:
         assert response.status_code == 400, "Expected status code 400 for missing userId"
         assert "error" in response.json(), "Expected 'error' key in response for missing userId"
 
-    def test_payout_without_win(self, mock_requests):
+    def test_payout_without_win(self):
         """
         Test: Attempting to payout with a winAmount of 0 (i.e., no actual win).
         Expected: Server should respond with 403 and error "No win to payout".
         """
-        logger.info("Testing payout without a win")
+        logger.info("[Negative Case] test_payout_without_win - trying to payout 0 winAmount")
 
-        mock_requests.post.return_value = MockHelper.make_mock_response(
+        self.mock.post.return_value = MockHelper.make_mock_response(
             {"error": "No win to payout"}, status_code=403
         )
 
@@ -77,14 +83,34 @@ class TestNegativeCases:
         assert response.status_code == 403, "Expected status code 403 for payout without win"
         assert "error" in response.json(), "Expected 'error' key in response for payout without win"
 
-    def test_empty_message_notify(self, mock_requests):
+    def test_duplicate_transaction_id(self):
+        """
+        Test: Reusing the same transaction ID twice for place_bet.
+        Expected: Server should reject or ignore the second usage (e.g., 409 Conflict).
+        """
+        logger.info("[Negative Case] test_duplicate_transaction_id - reusing transaction ID")
+
+        txn_id = "txn_duplicate"
+        self.mock.post.side_effect = [
+            MockHelper.make_mock_response({"transactionId": txn_id, "newBalance": 140}),
+            MockHelper.make_mock_response({"error": "Transaction already exists"}, status_code=409)
+        ]
+
+        first = place_bet(self.user_id, 10)
+        second = place_bet(self.user_id, 10)
+
+        assert first.status_code == 200
+        assert second.status_code == 409, "Expected 409 on duplicate transaction"
+        assert "error" in second.json()
+
+    def test_empty_message_notify(self):
         """
         Test: Attempting to send a notification with an empty message string.
         Expected: Server should respond with 400 and error "Message cannot be empty".
         """
-        logger.info("Testing notify with empty message")
+        logger.info("[Negative Case] test_empty_message_notify - sending empty message in notify")
 
-        mock_requests.post.return_value = MockHelper.make_mock_response(
+        self.mock.post.return_value = MockHelper.make_mock_response(
             {"error": "Message cannot be empty"}, status_code=400
         )
 
@@ -93,3 +119,20 @@ class TestNegativeCases:
 
         assert response.status_code == 400, "Expected status code 400 for empty message"
         assert "error" in response.json(), "Expected 'error' key in response for empty message"
+
+    def test_spin_before_place_bet(self):
+        """
+        Test: Triggering spin without placing a bet first.
+        Expected: Server should return 404 or 400 with error like "Bet not found".
+        """
+        logger.info("[Negative Case] test_spin_before_place_bet - calling spin before place_bet")
+
+        self.mock.post.return_value = MockHelper.make_mock_response(
+            {"error": "Bet not found"}, status_code=404
+        )
+
+        response = spin(self.user_id, 10, "fake_txn_001")
+        logger.debug(f"Response: {response.json()}")
+
+        assert response.status_code == 404, "Expected 404 when spin is called before placing a bet"
+        assert "error" in response.json(), "Expected error message in spin response"

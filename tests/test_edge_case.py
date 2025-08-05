@@ -1,62 +1,71 @@
 import pytest
-
-from utils.endpoints import notify, payout, spin, place_bet
 from utils.mock import MockHelper
 from utils.logger import get_logger
+from tests.common_tests.base_game_test import BaseGameTest
+from utils.endpoints import spin
 
 logger = get_logger(__name__)
 
 
 @pytest.mark.usefixtures("mock_requests")
-class TestExactBalanceEdgeCase:
+class TestEdgeCase(BaseGameTest):
 
-    def test_exact_balance_bet(self):
+    def test_bet_with_exact_balance_and_validate_3_reels(self):
         """
-        Test Scenario: User with exact balance places a bet, wins, receives payout, and gets notified.
+        Positive Edge Case:
+        User has exactly enough balance to place a bet (10 USD), receives a WIN,
+        and goes through the full spin-payout-notify flow successfully.
 
-        Steps:
-        1. Mock GET /balance to return 10 – simulates user with exact amount needed to bet.
-        2. Mock the sequence of POST responses:
-            - place_bet returns transaction ID and 0 balance
-            - spin returns a WIN response
-            - payout updates balance to 30
-            - notify returns SENT status
-        3. Call place_bet and assert status 200 and balance = 0
-        4. Call spin and assert status 200
-        5. Call payout and assert status 200 and newBalance = 30
-        6. Call notify and assert status 200 and status = SENT
+        Purpose:
+        - Validate edge condition: balance == bet
+        - Ensure newBalance is 0 after bet
+        - Confirm WIN response contains exactly 3 reels
+        - Assert data types and structural correctness
+        - Ensure payout and notification work as expected
+        - Validate currency consistency
         """
+        user_id = self.user_id
+        bet_amount = 10
+        transaction_id = "txn_555"
+        expected_reels = ["Cherry", "Cherry", "Cherry"]
 
-        logger.info("Mocking balance to return 10")
-        self.mock.get.return_value = MockHelper.make_mock_response({"balance": 10})
+        # Step 1: Mock balance to exactly the bet amount
+        self._mock_balance(bet_amount)
 
-        logger.info("Setting up mocked POST responses")
+        # Step 2: Setup all expected responses
         self.mock.post.side_effect = [
-            MockHelper.make_mock_response({"transactionId": "txn_555", "newBalance": 0}),
-            MockHelper.make_mock_response({"Win": {"winAmount": 30, "message": "You won!"}}),
-            MockHelper.make_mock_response({"newBalance": 30}),
+            MockHelper.make_mock_response({"transactionId": transaction_id, "newBalance": 0}),
+            MockHelper.make_mock_response({
+                "Win": {
+                    "userId": user_id,
+                    "outcome": "WIN",
+                    "winAmount": 30,
+                    "message": "You won!",
+                    "reels": expected_reels
+                }
+            }),
+            MockHelper.make_mock_response({"newBalance": 30, "currency": "USD"}),
             MockHelper.make_mock_response({"status": "SENT"})
         ]
 
-        logger.info("Placing bet of 10 for user 123")
-        bet_resp = place_bet(123, 10)
-        assert bet_resp.status_code == 200, "place_bet failed: expected status 200"
-        assert bet_resp.json()["newBalance"] == 0, "Expected newBalance to be 0 after full bet"
-        logger.debug(f"place_bet response: {bet_resp.json()}")
+        # Step 3: Place Bet
+        bet_resp = self._place_bet_and_assert(bet_amount, transaction_id)
+        assert bet_resp.json()["newBalance"] == 0, "Expected balance to be 0 after full bet"
 
-        logger.info("Spinning with transaction ID 'txn_555'")
-        spin_resp = spin(123, 10, "txn_555")
-        assert spin_resp.status_code == 200, "spin failed: expected status 200"
-        logger.debug(f"spin response: {spin_resp.json()}")
+        # Step 4: Spin
+        spin_resp = spin(user_id, bet_amount, transaction_id)
+        assert spin_resp.status_code == 200
+        spin_result = spin_resp.json()["Win"]
 
-        logger.info("Processing payout of 30 for transaction 'txn_555'")
-        payout_resp = payout(123, "txn_555", 30)
-        assert payout_resp.status_code == 200, "payout failed: expected status 200"
-        assert payout_resp.json()["newBalance"] == 30, "Expected newBalance to be 30 after payout"
-        logger.debug(f"payout response: {payout_resp.json()}")
+        # Step 5: Validate spin result
+        assert isinstance(spin_result.get("winAmount"), (int, float)), "winAmount should be numeric"
+        assert isinstance(spin_result.get("message"), str), "Message should be a string"
+        assert isinstance(spin_result.get("reels"), list), "Reels should be a list"
+        assert len(spin_result["reels"]) == 3, f"Expected 3 reels, got {len(spin_result['reels'])}"
+        assert spin_result.get("userId") == user_id, "User ID in response does not match request"
 
-        logger.info("Sending notification with message 'You won!'")
-        notify_resp = notify(123, "txn_555", "You won!")
-        assert notify_resp.status_code == 200, "notify failed: expected status 200"
-        assert notify_resp.json()["status"] == "SENT", "Expected notify status to be 'SENT'"
-        logger.debug(f"notify response: {notify_resp.json()}")
+        # Step 6: Payout and Notification
+        self._payout_and_assert(transaction_id, spin_result["winAmount"], 30)
+        self._notify_and_assert(transaction_id, spin_result["message"])
+
+        logger.info("Test passed: exact balance bet with full WIN flow and structure validation")

@@ -1,0 +1,15 @@
+2025-08-05 00:15:31,859 - INFO - Running full game test for user=123, bet=10, outcome=WIN
+2025-08-05 00:15:31,859 - INFO - Calling get_balance()
+2025-08-05 00:15:31,859 - INFO - Calling place_bet()
+2025-08-05 00:15:31,860 - INFO - Calling spin()
+2025-08-05 00:15:31,860 - INFO - User won with message: Congratulations! You won $50!
+2025-08-05 00:15:31,860 - INFO - Calling payout()
+2025-08-05 00:15:31,860 - INFO - Calling notify()
+2025-08-05 00:15:31,860 - INFO - Test completed successfully for user 123 with outcome WIN
+2025-08-05 00:15:31,862 - INFO - Running full game test for user=123, bet=10, outcome=LOSE
+2025-08-05 00:15:31,869 - INFO - Calling get_balance()
+2025-08-05 00:15:31,869 - INFO - Calling place_bet()
+2025-08-05 00:15:31,870 - INFO - Calling spin()
+2025-08-05 00:15:31,870 - INFO - User lost with message: Better luck next time!
+2025-08-05 00:15:31,870 - INFO - Calling notify()
+2025-08-05 00:15:31,870 - INFO - Test completed successfully for user 123 with outcome LOSE

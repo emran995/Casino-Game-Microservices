@@ -1,0 +1,30 @@
+2025-08-05 00:06:59,603 - INFO - Running test_regular_win
+2025-08-05 00:06:59,604 - INFO - Placing bet of 10
+2025-08-05 00:06:59,604 - DEBUG - place_bet response: {'transactionId': 'txn_001', 'newBalance': 140}
+2025-08-05 00:06:59,605 - INFO - Spinning with transaction ID txn_001
+2025-08-05 00:06:59,605 - DEBUG - spin response: {'Win': {'winAmount': 50, 'message': 'Congratulations! You won $50!'}}
+2025-08-05 00:06:59,605 - INFO - Processing payout of 50
+2025-08-05 00:06:59,605 - DEBUG - payout response: {'newBalance': 190}
+2025-08-05 00:06:59,605 - INFO - Sending win notification
+2025-08-05 00:06:59,611 - DEBUG - notify response: {'status': 'SENT'}
+2025-08-05 00:06:59,614 - INFO - Running test_regular_loss
+2025-08-05 00:06:59,614 - INFO - Placing losing bet
+2025-08-05 00:06:59,614 - INFO - Spinning with losing outcome
+2025-08-05 00:06:59,615 - DEBUG - spin response: {'Lose': {'message': 'Better luck next time!'}}
+2025-08-05 00:06:59,615 - INFO - Sending lose notification
+2025-08-05 00:06:59,615 - DEBUG - notify response: {'status': 'SENT'}
+2025-08-05 00:06:59,617 - INFO - Running test_multiple_rounds
+2025-08-05 00:06:59,618 - INFO - Round 1: Placing bet of 5
+2025-08-05 00:06:59,618 - INFO - Round 1: Spinning with transaction ID txn_1
+2025-08-05 00:06:59,618 - INFO - Round 2: Placing bet of 10
+2025-08-05 00:06:59,618 - INFO - Round 2: Spinning with transaction ID txn_2
+2025-08-05 00:06:59,618 - INFO - Round 3: Placing bet of 15
+2025-08-05 00:06:59,618 - INFO - Round 3: Spinning with transaction ID txn_3
+2025-08-05 00:06:59,621 - INFO - Running test_notify_format
+2025-08-05 00:06:59,622 - DEBUG - notify response: {'status': 'SENT'}
+2025-08-05 00:06:59,625 - INFO - Running test_balance_after_win
+2025-08-05 00:06:59,627 - INFO - Placing bet of 10
+2025-08-05 00:06:59,627 - INFO - Spinning and receiving WIN
+2025-08-05 00:06:59,627 - DEBUG - spin response: {'Win': {'winAmount': 50, 'message': 'You won!'}}
+2025-08-05 00:06:59,627 - INFO - Processing payout of 50
+2025-08-05 00:06:59,628 - DEBUG - payout response: {'newBalance': 140}

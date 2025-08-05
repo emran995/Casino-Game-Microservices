@@ -1,0 +1,7 @@
+2025-08-05 04:59:26,459 - INFO - [123] Balance mocked to $150 USD
+2025-08-05 04:59:26,461 - INFO - [123] Placed bet of $10, transactionId=txn_123
+2025-08-05 04:59:26,467 - INFO - [123] Payout of $50 processed. New balance: $190
+2025-08-05 04:59:26,473 - INFO - [123] Notification sent successfully: 'Congratulations! You won $50!'
+2025-08-05 04:59:26,495 - INFO - [123] Balance mocked to $150 USD
+2025-08-05 04:59:26,495 - INFO - [123] Placed bet of $10, transactionId=txn_123
+2025-08-05 04:59:26,508 - INFO - [123] Notification sent successfully: 'Better luck next time!'

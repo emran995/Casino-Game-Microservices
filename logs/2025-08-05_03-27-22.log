@@ -1,0 +1,35 @@
+2025-08-05 03:27:22,942 - INFO - Running: test_full_game_win_flow
+2025-08-05 03:27:22,957 - INFO - [User 123] Initial balance set to $150
+2025-08-05 03:27:22,958 - INFO - [User 123] Placed bet of $10, transactionId=txn_win
+2025-08-05 03:27:22,958 - INFO - [User 123] Spin returned: Win
+2025-08-05 03:27:23,075 - INFO - Running: test_full_game_loss_flow
+2025-08-05 03:27:23,076 - INFO - [User 123] Initial balance set to $150
+2025-08-05 03:27:23,076 - INFO - [User 123] Placed bet of $10, transactionId=txn_loss
+2025-08-05 03:27:23,076 - INFO - [User 123] Notification sent successfully
+2025-08-05 03:27:23,085 - INFO - Running: test_extreme_bet_values (maximum allowed bet)
+2025-08-05 03:27:23,085 - INFO - [User 123] Initial balance set to $2000
+2025-08-05 03:27:23,086 - INFO - [User 123] Placed bet of $100, transactionId=txn_100
+2025-08-05 03:27:23,086 - INFO - [User 123] Spin returned: Win
+2025-08-05 03:27:23,098 - INFO - Running: test_extreme_bet_values (minimum allowed bet)
+2025-08-05 03:27:23,099 - INFO - [User 123] Initial balance set to $2000
+2025-08-05 03:27:23,099 - INFO - [User 123] Placed bet of $1, transactionId=txn_1
+2025-08-05 03:27:23,100 - INFO - [User 123] Spin returned: Win
+2025-08-05 03:27:23,112 - INFO - Running: test_extreme_bet_values (beyond maximum allowed bet)
+2025-08-05 03:27:23,113 - INFO - [User 123] Initial balance set to $2000
+2025-08-05 03:27:23,113 - INFO - [User 123] Placed bet of $1000, transactionId=txn_1000
+2025-08-05 03:27:23,113 - INFO - [User 123] Spin returned: Win
+2025-08-05 03:27:23,128 - INFO - Running: test_spin_response_time_delay_handling
+2025-08-05 03:27:23,129 - INFO - [User 123] Initial balance set to $150
+2025-08-05 03:27:23,129 - INFO - [User 123] Placed bet of $10, transactionId=txn_delay
+2025-08-05 03:27:26,157 - INFO - Running: test_multiple_parallel_successful_rounds
+2025-08-05 03:27:26,158 - INFO - [User 123] Initial balance set to $300
+2025-08-05 03:27:26,159 - INFO - [Round 1] Starting with txn_id=txn_parallel_1 and bet=10
+2025-08-05 03:27:26,159 - INFO - [User 123] Placed bet of $10, transactionId=txn_parallel_1
+2025-08-05 03:27:26,160 - INFO - [Round 2] Starting with txn_id=txn_parallel_2 and bet=20
+2025-08-05 03:27:26,160 - INFO - [User 123] Spin returned: Win
+2025-08-05 03:27:26,160 - INFO - [User 123] Placed bet of $20, transactionId=txn_parallel_2
+2025-08-05 03:27:26,161 - INFO - [Round 3] Starting with txn_id=txn_parallel_3 and bet=30
+2025-08-05 03:27:26,162 - INFO - [User 123] Placed bet of $30, transactionId=txn_parallel_3
+2025-08-05 03:27:26,162 - INFO - [User 123] Spin returned: Win
+2025-08-05 03:27:26,162 - INFO - [User 123] Notification sent successfully
+2025-08-05 03:27:26,162 - INFO - All parallel rounds completed successfully

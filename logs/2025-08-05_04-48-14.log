@@ -1,0 +1,13 @@
+2025-08-05 04:48:14,020 - INFO - Running full game flow test | user: 123 | bet: 10 | outcome: WIN
+2025-08-05 04:48:14,021 - INFO - [123] Balance mocked to $150 USD
+2025-08-05 04:48:14,021 - INFO - [123] Placed bet of $10, transactionId=txn_123
+2025-08-05 04:48:14,022 - INFO - User won with message: Congratulations! You won $50!
+2025-08-05 04:48:14,022 - INFO - [123] Payout of $50 processed. New balance: $190
+2025-08-05 04:48:14,022 - INFO - [123] Notification sent successfully: 'Congratulations! You won $50!'
+2025-08-05 04:48:14,022 - INFO - Test completed: WIN case successful for user 123
+2025-08-05 04:48:14,031 - INFO - Running full game flow test | user: 123 | bet: 10 | outcome: LOSE
+2025-08-05 04:48:14,032 - INFO - [123] Balance mocked to $150 USD
+2025-08-05 04:48:14,032 - INFO - [123] Placed bet of $10, transactionId=txn_123
+2025-08-05 04:48:14,032 - INFO - User lost with message: Better luck next time!
+2025-08-05 04:48:14,032 - INFO - [123] Notification sent successfully: 'Better luck next time!'
+2025-08-05 04:48:14,032 - INFO - Test completed: LOSE case successful for user 123

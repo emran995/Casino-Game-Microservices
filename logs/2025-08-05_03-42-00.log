@@ -1,0 +1,32 @@
+2025-08-05 03:42:00,268 - INFO - Running: test_full_game_win_flow
+2025-08-05 03:42:00,269 - INFO - [123] Initial balance set to $150
+2025-08-05 03:42:00,269 - INFO - [123] Placed bet of $10, transactionId=txn_win
+2025-08-05 03:42:00,269 - INFO - [123] Spin returned: Win
+2025-08-05 03:42:00,392 - INFO - Running: test_full_game_loss_flow
+2025-08-05 03:42:00,393 - INFO - [123] Initial balance set to $150
+2025-08-05 03:42:00,403 - INFO - Running: test_extreme_bet_values (maximum allowed bet)
+2025-08-05 03:42:00,403 - INFO - [123] Initial balance set to $2000
+2025-08-05 03:42:00,404 - INFO - [123] Placed bet of $100, transactionId=txn_100
+2025-08-05 03:42:00,405 - INFO - [123] Spin returned: Win
+2025-08-05 03:42:00,417 - INFO - Running: test_extreme_bet_values (minimum allowed bet)
+2025-08-05 03:42:00,417 - INFO - [123] Initial balance set to $2000
+2025-08-05 03:42:00,418 - INFO - [123] Placed bet of $1, transactionId=txn_1
+2025-08-05 03:42:00,418 - INFO - [123] Spin returned: Win
+2025-08-05 03:42:00,432 - INFO - Running: test_extreme_bet_values (beyond maximum allowed bet)
+2025-08-05 03:42:00,433 - INFO - [123] Initial balance set to $2000
+2025-08-05 03:42:00,433 - INFO - [123] Placed bet of $1000, transactionId=txn_1000
+2025-08-05 03:42:00,434 - INFO - [123] Spin returned: Win
+2025-08-05 03:42:00,464 - INFO - Running: test_spin_response_time_delay_handling
+2025-08-05 03:42:00,465 - INFO - [123] Initial balance set to $150
+2025-08-05 03:42:00,465 - INFO - [123] Placed bet of $10, transactionId=txn_delay
+2025-08-05 03:42:03,476 - INFO - Running: test_multiple_parallel_successful_rounds
+2025-08-05 03:42:03,477 - INFO - [123] Initial balance set to $300
+2025-08-05 03:42:03,477 - INFO - [Round 1] Starting
+2025-08-05 03:42:03,478 - INFO - [Round 2] Starting
+2025-08-05 03:42:03,479 - INFO - [Round 3] Starting
+2025-08-05 03:42:03,479 - INFO - All parallel rounds completed successfully
+2025-08-05 03:42:03,492 - INFO - Running: test_exact_balance_edge_case
+2025-08-05 03:42:03,492 - INFO - [123] Initial balance set to $10
+2025-08-05 03:42:03,493 - INFO - [123] Placed bet of $10, transactionId=txn_555
+2025-08-05 03:42:03,493 - INFO - [123] Payout processed: {'newBalance': 30, 'currency': 'USD'}
+2025-08-05 03:42:03,493 - INFO - [123] Notification sent successfully

@@ -1,0 +1,37 @@
+2025-08-05 03:51:12,047 - INFO - Running: test_full_game_win_flow
+2025-08-05 03:51:12,048 - INFO - Initial balance set to $150
+2025-08-05 03:51:12,050 - INFO - Running: test_full_game_loss_flow
+2025-08-05 03:51:12,051 - INFO - Initial balance set to $150
+2025-08-05 03:51:12,054 - INFO - Running: test_extreme_bet_values (maximum allowed bet)
+2025-08-05 03:51:12,054 - INFO - Initial balance set to $2000
+2025-08-05 03:51:12,054 - INFO - Placed bet of $100, transactionId=txn_100
+2025-08-05 03:51:12,055 - INFO - Spin returned: Win
+2025-08-05 03:51:12,055 - INFO - Notification sent successfully
+2025-08-05 03:51:12,060 - INFO - Running: test_extreme_bet_values (minimum allowed bet)
+2025-08-05 03:51:12,061 - INFO - Initial balance set to $2000
+2025-08-05 03:51:12,061 - INFO - Placed bet of $1, transactionId=txn_1
+2025-08-05 03:51:12,061 - INFO - Spin returned: Win
+2025-08-05 03:51:12,062 - INFO - Notification sent successfully
+2025-08-05 03:51:12,064 - INFO - Running: test_extreme_bet_values (beyond maximum allowed bet)
+2025-08-05 03:51:12,064 - INFO - Initial balance set to $2000
+2025-08-05 03:51:12,065 - INFO - Placed bet of $1000, transactionId=txn_1000
+2025-08-05 03:51:12,065 - INFO - Spin returned: Win
+2025-08-05 03:51:12,065 - INFO - Notification sent successfully
+2025-08-05 03:51:12,067 - INFO - Running: test_spin_response_time_delay_handling
+2025-08-05 03:51:12,068 - INFO - Initial balance set to $150
+2025-08-05 03:51:12,068 - INFO - Placed bet of $10, transactionId=txn_delay
+2025-08-05 03:51:15,069 - INFO - Notification sent successfully
+2025-08-05 03:51:15,071 - INFO - Running: test_multiple_parallel_successful_rounds
+2025-08-05 03:51:15,072 - INFO - Initial balance set to $300
+2025-08-05 03:51:15,072 - INFO - [Round 1] Starting with txn_id=txn_parallel_1 and bet=10
+2025-08-05 03:51:15,073 - INFO - [Round 1] place_bet: {'transactionId': 'txn_parallel_1', 'newBalance': 290}
+2025-08-05 03:51:15,073 - INFO - [Round 2] Starting with txn_id=txn_parallel_2 and bet=20
+2025-08-05 03:51:15,073 - INFO - [Round 1] spin: {'Win': {'winAmount': 50}}
+2025-08-05 03:51:15,074 - INFO - [Round 2] place_bet: {'transactionId': 'txn_parallel_2', 'newBalance': 280}
+2025-08-05 03:51:15,074 - INFO - [Round 3] Starting with txn_id=txn_parallel_3 and bet=30
+2025-08-05 03:51:15,074 - INFO - [Round 1] notify: {'Win': {'winAmount': 50}}
+2025-08-05 03:51:15,075 - INFO - [Round 2] spin: {'status': 'SENT'}
+2025-08-05 03:51:15,075 - INFO - [Round 3] place_bet: {'transactionId': 'txn_parallel_3', 'newBalance': 270}
+2025-08-05 03:51:15,075 - INFO - [Round 2] notify: {'Win': {'winAmount': 50}}
+2025-08-05 03:51:15,076 - INFO - [Round 3] spin: {'status': 'SENT'}
+2025-08-05 03:51:15,077 - INFO - All parallel rounds completed successfully

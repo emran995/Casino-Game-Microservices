@@ -1,0 +1,4 @@
+2025-08-05 04:53:38,451 - INFO - Running test: User=123, Bet=10, Outcome=WIN
+2025-08-05 04:53:38,452 - INFO - User won! Message: Congratulations! You won $50!
+2025-08-05 04:53:38,469 - INFO - Running test: User=123, Bet=10, Outcome=LOSE
+2025-08-05 04:53:38,471 - INFO - User lost. Message: Better luck next time!

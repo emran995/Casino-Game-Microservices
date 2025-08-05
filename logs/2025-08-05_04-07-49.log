@@ -1,0 +1,5 @@
+2025-08-05 04:07:49,239 - INFO - Initial balance set to $10
+2025-08-05 04:07:49,251 - INFO - Placed bet of $10, transactionId=txn_555
+2025-08-05 04:07:49,252 - INFO - Payout processed: {'newBalance': 30, 'currency': 'USD'}
+2025-08-05 04:07:49,252 - INFO - Notification sent successfully
+2025-08-05 04:07:49,252 - INFO - Test passed: exact balance bet with full WIN flow and structure validation
