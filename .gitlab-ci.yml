@@ -26,13 +26,13 @@ smoke_test:
   extends: .default_python_job
   stage: smoke
   script:
-    - pytest -m smoke_tests $PYTEST_FLAGS
+    - pytest tests/test_security_and_validation.py -v $PYTEST_FLAGS
 
 main_tests:
   extends: .default_python_job
   stage: test
   script:
-    - pytest -m "positive_tests or nigative_tests or edge_test or full_game_flow_test" $PYTEST_FLAGS
+    - pytest tests/test_true_cases.py tests/test_false_cases.py tests/test_edge_case.py tests/full_game_flow.py -v --maxfail=1 --tb=short $PYTEST_FLAGS
 
 kafka_tests:
   image: docker:latest
