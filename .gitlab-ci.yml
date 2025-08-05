@@ -56,3 +56,5 @@ kafka_tests:
     paths:
       - results/
     when: always
+
+
