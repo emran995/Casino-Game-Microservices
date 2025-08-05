@@ -47,7 +47,8 @@ emran_project/
 ├── kafka_producer.py           # Kafka message sender
 ├── kafka_consumer.py           # Kafka message consumer (results)
 ├── requirements.txt            # Python dependencies
-├── STP_STD_docs.pdf            # Attached test design document
+├── STP_STD_docs.pdf            # Attached test design document (Includes explanation of chosen edge case)
+├── casino_task_part_3.pdf      # Contains the full implementation and explanation for Part 3: Code Debugging
 ├── tests/
 │   ├── test_true_cases.py      # Strong positive cases
 │   ├── test_false_cases.py     # Negative test scenarios
