@@ -14,28 +14,23 @@ variables:
   before_script:
     - pip install -r requirements.txt || pip install pytest requests confluent_kafka
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH'
       when: on_success
-    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$SYSTEM_TEST == $CI_JOB_NAME'
       when: on_success
+    - when: never
 
 smoke_tests:
   extends: .default_python_job
   stage: smoke
   script:
     - pytest tests/test_security_and_validation.py $PYTEST_FLAGS
-  rules:
-    - if: '$SYSTEM_TEST =~ /.*smoke_tests.*/'
-      when: on_success
 
 main_tests:
   extends: .default_python_job
   stage: test
   script:
     - pytest tests/test_true_cases.py tests/test_false_cases.py tests/test_edge_case.py tests/full_game_flow.py $PYTEST_FLAGS
-  rules:
-    - if: '$SYSTEM_TEST =~ /.*main_tests.*/'
-      when: on_success
 
 kafka_tests:
   image: docker:latest
@@ -52,3 +47,9 @@ kafka_tests:
     paths:
       - results/
     when: always
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+      when: on_success
+    - if: '$SYSTEM_TEST == "kafka_tests"'
+      when: on_success
+    - when: never
