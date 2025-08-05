@@ -2,7 +2,9 @@
 
 ### Overview
 
-This project is a test automation solution for a simplified Slot Machine Game composed of four interconnected microservices:
+This project is a test automation solution for a simplified Slot Machine Game composed of four interconnected microservices. It is designed around mocked responses to simulate real service behavior during testing. This mock-based approach ensures reliable, fast, and isolated test execution by eliminating dependency on real backend services. It enables accurate validation of API interactions, error handling, and edge scenarios while keeping the CI pipeline stable and lightweight.
+
+For a simplified Slot Machine Game composed of four interconnected microservices:
 
 * **User Service** – Manages player balance
 * **Payment Service** – Handles bets and payouts
@@ -90,8 +92,7 @@ pytest tests/test_security_and_validation.py
 docker-compose up --abort-on-container-exit
 ```
 
-Optional: Choose a Specific `user_id`
-By default, the test suite uses `user_id = 123`. You can override it when running any test by passing the `--user_id` option to pytest:
+Optional: Choose a Specific `user_id` By default, the test suite uses `user_id = 123`. You can override it when running any test by passing the `--user_id` option to pytest:
 
 ```bash
 pytest tests/test_true_cases.py --user_id=456
