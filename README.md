@@ -206,3 +206,12 @@ This makes Kafka tests portable across local and CI environments.
 * Test Automation: \~4 hours
 * CI/CD, Docker, Kafka setup: \~2 hours
 * Debugging & Reporting: \~1 hour
+
+
+
+### Note
+The test documents (STD, STP) and Part 3: Code Debugging are included in the project.
+Specifically, these are provided as the following files:
+
+casino_task_part_3.pdf
+Slot_game_test_docs_STP_STD.pdf
