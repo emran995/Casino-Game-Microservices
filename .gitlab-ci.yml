@@ -9,30 +9,50 @@ variables:
   DOCKER_TLS_CERTDIR: ""
   PYTEST_FLAGS: "--durations=0 --disable-pytest-warnings --color=yes --code-highlight=yes -vv --tb=short -W ignore::DeprecationWarning -W ignore::PendingDeprecationWarning -W ignore::pytest.PytestWarning --cache-clear"
 
+.common_rules:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web" && $SYSTEM_TEST == $CI_JOB_NAME'
+      when: on_success
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $SYSTEM_TEST == $CI_JOB_NAME'
+      when: on_success
+    - when: never
+
 .default_python_job:
+  extends: .common_rules
   image: python:3.10
   before_script:
     - pip install -r requirements.txt || pip install pytest requests confluent_kafka
   rules:
-    - if: '$CI_COMMIT_BRANCH'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: on_success
-    - if: '$SYSTEM_TEST == $CI_JOB_NAME'
+    - if: '$CI_COMMIT_BRANCH == "main"'
       when: on_success
-    - when: never
+  artifacts:
+    paths:
+      - logs/
+    when: always
+    expire_in: 1 week
 
 smoke_tests:
   extends: .default_python_job
   stage: smoke
   script:
     - pytest tests/test_security_and_validation.py $PYTEST_FLAGS
+  rules:
+    - if: '$SYSTEM_TEST =~ /.*smoke_tests.*/'
+      when: on_success
 
 main_tests:
   extends: .default_python_job
   stage: test
   script:
     - pytest tests/test_true_cases.py tests/test_false_cases.py tests/test_edge_case.py tests/full_game_flow.py $PYTEST_FLAGS
+  rules:
+    - if: '$SYSTEM_TEST =~ /.*main_tests.*/'
+      when: on_success
 
 kafka_tests:
+  extends: .default_python_job
   image: docker:latest
   stage: kafka
   services:
@@ -46,10 +66,9 @@ kafka_tests:
   artifacts:
     paths:
       - results/
+      - logs/
     when: always
+    expire_in: 1 week
   rules:
-    - if: '$CI_COMMIT_BRANCH'
+    - if: '$SYSTEM_TEST =~ /.*kafka_tests.*/'
       when: on_success
-    - if: '$SYSTEM_TEST == "kafka_tests"'
-      when: on_success
-    - when: never
