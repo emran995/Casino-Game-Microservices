@@ -1,0 +1,5 @@
+2025-08-05 18:05:25,311 - INFO - [123] Balance mocked to $10 USD
+2025-08-05 18:05:25,312 - INFO - [123] Placed bet of $10, transactionId=txn_555
+2025-08-05 18:05:25,313 - INFO - [123] Payout of $30 processed. New balance: $30
+2025-08-05 18:05:25,313 - INFO - [123] Notification sent successfully: 'You won!'
+2025-08-05 18:05:25,313 - INFO - Test passed: exact balance bet with full WIN flow and structure validation
