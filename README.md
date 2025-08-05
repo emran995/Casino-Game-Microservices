@@ -210,8 +210,9 @@ This makes Kafka tests portable across local and CI environments.
 
 
 ### Note
-The test documents (STD, STP) and Part 3: Code Debugging are included in the project.
-Specifically, these are provided as the following files:
+The project includes the test documentation (STD, STP) and Part 3: Code Debugging as part of the submission.
+The following files are provided:
 
-casino_task_part_3.pdf
-Slot_game_test_docs_STP_STD.pdf
+Slot_game_test_docs_STP_STD.pdf – Contains the Software Test Plan (STP) and Software Test Design (STD), including a dedicated section explaining why the selected edge case was chosen.
+
+casino_task_part_3.pdf – Contains the full implementation and explanation for Part 3: Code Debugging.
