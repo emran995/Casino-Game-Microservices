@@ -72,3 +72,4 @@ kafka_tests:
   rules:
     - if: '$SYSTEM_TEST =~ /.*kafka_tests.*/'
       when: on_success
+
